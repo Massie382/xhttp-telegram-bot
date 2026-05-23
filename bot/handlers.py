@@ -3,10 +3,10 @@ from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, Mess
 from .db import (
     user_exists, create_user, get_user_lang, set_user_lang, 
     set_linked_username, get_linked_username, unlink_user, is_linked,
-    get_all_servers
+    get_all_servers, get_server_by_name
 )
 from .strings import get_text
-from .utils import unicode_bar, days_left_from_iso, format_bytes
+from .utils import unicode_bar, days_left_from_iso
 from .api_client import XHTTPManagerClient
 import re
 
@@ -226,7 +226,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(get_text("no_servers", lang))
         return
 
-    await update.message.reply_text("⏳ Fetching stats from all servers...")
+    await update.message.reply_text(get_text("fetching", lang))
 
     results = []
     for server in servers:
@@ -236,7 +236,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         results.append((server["name"], stats, details))
         await client.close()
 
-    lines = [get_text("usage_header", lang, username)]
+    lines = [get_text("usage_header", lang, username=username)]
     for name, stats, details in results:
         lines.append(f"🌍 **{name}**")
         if not stats or "error" in stats:
@@ -312,7 +312,7 @@ async def qr_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     lang = get_user_lang(user_id)
     if len(context.args) != 1:
-        await update.message.reply_text(get_text("usage", lang).format("/qr <server_name>"))
+        await update.message.reply_text(get_text("usage", lang, "/qr <server_name>"))
         return
     server_name = context.args[0]
     username = get_linked_username(user_id)
