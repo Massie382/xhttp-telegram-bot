@@ -1,8 +1,8 @@
 # Localised strings (English & Persian)
 STRINGS = {
     "en": {
-        "welcome": "👋 Welcome to XHTTP Bot!\n\nSend /link <username> to connect your XHTTP account.",
-        "not_linked": "❌ You are not linked. Use /link <username> first.",
+        "welcome": "👋 Welcome to XHTTP Bot!\n\nUse /link to connect your XHTTP account.",
+        "not_linked": "❌ You are not linked. Use /link first.",
         "already_linked": "✅ You are already linked as `{}`. Use /unlink to change.",
         "link_success": "✅ Linked to `{}`.",
         "unlink_success": "✅ Unlinked.",
@@ -34,8 +34,8 @@ STRINGS = {
         "broadcast_sent": "📢 Broadcast sent to {} users.",
     },
     "fa": {
-        "welcome": "👋 به بات XHTTP خوش آمدید!\n\nبرای اتصال حساب خود از /link <username> استفاده کنید.",
-        "not_linked": "❌ شما متصل نیستید. ابتدا از /link <username> استفاده کنید.",
+        "welcome": "👋 به بات XHTTP خوش آمدید!\n\nبرای اتصال حساب خود از /link استفاده کنید.",
+        "not_linked": "❌ شما متصل نیستید. ابتدا از /link استفاده کنید.",
         "already_linked": "✅ شما به عنوان `{}` متصل شده‌اید. برای تغییر از /unlink استفاده کنید.",
         "link_success": "✅ به `{}` متصل شدید.",
         "unlink_success": "✅ اتصال قطع شد.",
