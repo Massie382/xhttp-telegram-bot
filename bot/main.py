@@ -14,7 +14,7 @@ from bot.handlers import (
     language_command, language_callback,
     link_start, link_receive_username, link_cancel, link_overwrite_callback,
     unlink_command, servers_command, status_command, 
-    getconfig_command, qr_command
+    getconfig_command, getconfig_callback, qr_command, qr_callback
 )
 from bot.admin_handlers import (
     addserver_command, removeserver_command, adduser_command, removeuser_command,
@@ -22,7 +22,6 @@ from bot.admin_handlers import (
     userinfo_command, lookup_command, broadcast_command
 )
 
-# Conversation states
 WAITING_FOR_USERNAME = 1
 
 def main():
@@ -33,17 +32,11 @@ def main():
     init_db()
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    # Start command with language detection
     app.add_handler(CommandHandler("start", start))
-    
-    # First-time language selection callback
     app.add_handler(CallbackQueryHandler(first_language_callback, pattern="^first_lang_"))
-    
-    # Language change command (for existing users)
     app.add_handler(CommandHandler("language", language_command))
     app.add_handler(CallbackQueryHandler(language_callback, pattern="^lang_"))
     
-    # Link conversation handler
     link_conv = ConversationHandler(
         entry_points=[CommandHandler("link", link_start)],
         states={
@@ -56,14 +49,15 @@ def main():
     )
     app.add_handler(link_conv)
     
-    # Other user commands
     app.add_handler(CommandHandler("unlink", unlink_command))
     app.add_handler(CommandHandler("servers", servers_command))
     app.add_handler(CommandHandler("status", status_command))
     app.add_handler(CommandHandler("getconfig", getconfig_command))
     app.add_handler(CommandHandler("qr", qr_command))
+    
+    app.add_handler(CallbackQueryHandler(getconfig_callback, pattern="^getconfig_"))
+    app.add_handler(CallbackQueryHandler(qr_callback, pattern="^qr_"))
 
-    # Admin commands
     app.add_handler(CommandHandler("addserver", addserver_command))
     app.add_handler(CommandHandler("removeserver", removeserver_command))
     app.add_handler(CommandHandler("adduser", adduser_command))
@@ -76,7 +70,6 @@ def main():
     app.add_handler(CommandHandler("lookup", lookup_command))
     app.add_handler(CommandHandler("broadcast", broadcast_command))
 
-    # Set command menu
     async def post_init(application):
         await application.bot.set_my_commands([
             ("start", "Start the bot"),
