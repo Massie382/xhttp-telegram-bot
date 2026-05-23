@@ -37,6 +37,18 @@ def get_db():
         conn.close()
 
 # User functions
+def user_exists(telegram_id: int) -> bool:
+    with get_db() as conn:
+        cur = conn.execute("SELECT 1 FROM bot_users WHERE telegram_id = ?", (telegram_id,))
+        return cur.fetchone() is not None
+
+def create_user(telegram_id: int, language: str = "en"):
+    with get_db() as conn:
+        conn.execute(
+            "INSERT INTO bot_users (telegram_id, language) VALUES (?, ?)",
+            (telegram_id, language)
+        )
+
 def get_user_lang(telegram_id: int) -> str:
     with get_db() as conn:
         cur = conn.execute("SELECT language FROM bot_users WHERE telegram_id = ?", (telegram_id,))
