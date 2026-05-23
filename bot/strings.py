@@ -75,30 +75,18 @@ STRINGS = {
 }
 
 def get_text(key: str, lang: str = "en", *args, **kwargs) -> str:
-    """
-    Get localized text for the given key and language.
-    
-    Usage:
-        get_text("welcome", "en")  -> returns English welcome
-        get_text("welcome", "fa")  -> returns Persian welcome
-        get_text("days_left", "en", days=5)  -> returns "Days left: 📅 5 days"
-        get_text("data_label", "fa", bar, used_gb, cap_gb, percent)  -> positional args
-    """
-    # Ensure lang is valid
+    """Get localized text for the given key and language."""
     if not lang or lang not in STRINGS:
         lang = "en"
     
-    # Get the text
     text = STRINGS[lang].get(key, STRINGS["en"].get(key, key))
     
-    # Format with positional arguments
     if args:
         try:
             return text.format(*args)
         except (IndexError, KeyError):
             return text
     
-    # Format with keyword arguments
     if kwargs:
         try:
             return text.format(**kwargs)
