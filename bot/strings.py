@@ -8,8 +8,8 @@ STRINGS = {
         "unlink_success": "✅ Unlinked.",
         "no_servers": "⚠️ No servers configured. Contact admin.",
         "servers_list": "🖥 **Monitored servers:**\n{}",
-        "language_changed": "✅ Language set to English.",
-        "language_changed_fa": "✅ زبان به فارسی تنظیم شد.",
+        "language_changed": "✅ Language set to English!",
+        "language_changed_fa": "✅ زبان به فارسی تنظیم شد!",
         "usage_header": "📊 **Usage for `{}`**\n",
         "no_account": "❌ No account found.",
         "error": "⚠️ Error: {}",
@@ -34,6 +34,7 @@ STRINGS = {
         "user_extended": "✅ User '{}' extended by {} days on {}.",
         "broadcast_sent": "📢 Broadcast sent to {} users.",
         "fetching": "⏳ Fetching stats from all servers...",
+        "select_language": "Select your language / زبان خود را انتخاب کنید:",
     },
     "fa": {
         "welcome": "👋 به بات XHTTP خوش آمدید!\n\nبرای اتصال حساب از /link استفاده کنید.",
@@ -43,8 +44,8 @@ STRINGS = {
         "unlink_success": "✅ اتصال قطع شد.",
         "no_servers": "⚠️ هیچ سروری تنظیم نشده است. با مدیر تماس بگیرید.",
         "servers_list": "🖥 **سرورهای تحت نظارت:**\n{}",
-        "language_changed": "✅ زبان به انگلیسی تنظیم شد.",
-        "language_changed_fa": "✅ زبان به فارسی تنظیم شد.",
+        "language_changed": "✅ زبان به انگلیسی تنظیم شد!",
+        "language_changed_fa": "✅ زبان به فارسی تنظیم شد!",
         "usage_header": "📊 **وضعیت کاربری `{}`**\n",
         "no_account": "❌ حسابی یافت نشد.",
         "error": "⚠️ خطا: {}",
@@ -69,28 +70,35 @@ STRINGS = {
         "user_extended": "✅ کاربر '{}' به مدت {} روز در {} تمدید شد.",
         "broadcast_sent": "📢 پیام به {} کاربر ارسال شد.",
         "fetching": "⏳ در حال دریافت اطلاعات از همه سرورها...",
+        "select_language": "زبان خود را انتخاب کنید / Select your language:",
     }
 }
 
 def get_text(key: str, lang: str = "en", *args, **kwargs) -> str:
-    """Get localized text for the given key and language."""
-    # Ensure lang is a string and default to 'en' if not found
-    lang = str(lang) if lang else "en"
+    """
+    Get localized text for the given key and language.
     
-    # Get the language dictionary, fallback to 'en'
-    lang_dict = STRINGS.get(lang, STRINGS.get("en", {}))
+    Usage:
+        get_text("welcome", "en")  -> returns English welcome
+        get_text("welcome", "fa")  -> returns Persian welcome
+        get_text("days_left", "en", days=5)  -> returns "Days left: 📅 5 days"
+        get_text("data_label", "fa", bar, used_gb, cap_gb, percent)  -> positional args
+    """
+    # Ensure lang is valid
+    if not lang or lang not in STRINGS:
+        lang = "en"
     
-    # Get the text, fallback to key itself
-    text = lang_dict.get(key, key)
+    # Get the text
+    text = STRINGS[lang].get(key, STRINGS["en"].get(key, key))
     
-    # Handle positional arguments (for old-style calls)
+    # Format with positional arguments
     if args:
         try:
-            return text.format(*args, **kwargs)
-        except (KeyError, IndexError):
+            return text.format(*args)
+        except (IndexError, KeyError):
             return text
     
-    # Handle keyword arguments
+    # Format with keyword arguments
     if kwargs:
         try:
             return text.format(**kwargs)
