@@ -27,6 +27,7 @@ fi
 
 # Determine script directory (supports curl | bash)
 if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
+    # ✅ FIXED: use the correct repository URL
     REPO_URL="https://raw.githubusercontent.com/Massie382/xhttp-telegram-bot/main"
     TMPDIR=$(mktemp -d /tmp/xhttp-telegram-bot.XXXXXX)
     cd "$TMPDIR"
@@ -34,7 +35,7 @@ if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
     curl -fsSL -O "$REPO_URL/install.sh"
     curl -fsSL -O "$REPO_URL/requirements.txt"
     curl -fsSL -O "$REPO_URL/config.example.toml"
-    curl -fsSL -O "$REPO_URL/setup_tunnels.sh"  # ✅ FIX: download tunnel script
+    curl -fsSL -O "$REPO_URL/setup_tunnels.sh"
     mkdir -p bot systemd
     curl -fsSL "$REPO_URL/bot/main.py" -o bot/main.py
     curl -fsSL "$REPO_URL/bot/config.py" -o bot/config.py
@@ -55,7 +56,7 @@ DATA_DIR="/var/lib/xhttp-telegram-bot"
 
 echo -e "${CYAN}[1/5] Installing system packages...${NC}"
 apt-get update -qq
-apt-get install -y -qq python3 python3-venv python3-pip jq curl sqlite3 rsync  # ✅ FIX: added rsync
+apt-get install -y -qq python3 python3-venv python3-pip jq curl sqlite3 rsync
 echo -e "      ${GREEN}✔ Dependencies installed${NC}"
 
 echo -e "${CYAN}[2/5] Creating directories...${NC}"
