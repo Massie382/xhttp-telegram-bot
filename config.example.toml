@@ -1,0 +1,5 @@
+[bot]
+token = "YOUR_BOT_TOKEN_HERE"
+
+[database]
+path = "/var/lib/xhttp-telegram-bot/bot.db"
