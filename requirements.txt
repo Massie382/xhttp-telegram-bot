@@ -1,4 +1,4 @@
 python-telegram-bot==20.7
-httpx==0.27.0
-toml==0.10.2
+httpx
 qrcode[pil]==7.4.2
+toml==0.10.2
