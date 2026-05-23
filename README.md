@@ -13,4 +13,4 @@ A Telegram bot that integrates with [xhttp-manager](https://github.com/Massie382
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yourusername/xhttp-telegram-bot/main/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/Massie382/xhttp-telegram-bot/main/install.sh | sudo bash
