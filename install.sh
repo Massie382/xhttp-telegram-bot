@@ -27,7 +27,7 @@ fi
 
 # Determine script directory (supports curl | bash)
 if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
-    REPO_URL="https://raw.githubusercontent.com/yourusername/xhttp-telegram-bot/main"
+    REPO_URL="https://raw.githubusercontent.com/Massie382/xhttp-telegram-bot/main"
     TMPDIR=$(mktemp -d /tmp/xhttp-telegram-bot.XXXXXX)
     cd "$TMPDIR"
     echo -e "${CYAN}Downloading installer files...${NC}"
