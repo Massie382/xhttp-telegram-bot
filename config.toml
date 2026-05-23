@@ -1,0 +1,6 @@
+[bot]
+token = "YOUR_BOT_TOKEN"
+admin_ids = []  # optional; normally auto‑promoted
+
+[database]
+path = "/var/lib/xhttp-telegram-bot/bot.db"

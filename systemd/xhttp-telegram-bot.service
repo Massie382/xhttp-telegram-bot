@@ -1,0 +1,15 @@
+[Unit]
+Description=XHTTP Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/xhttp-telegram-bot
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/opt/xhttp-telegram-bot/venv/bin/python -m bot.main
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
