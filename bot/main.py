@@ -3,7 +3,10 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
 
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler
+from telegram.ext import (
+    ApplicationBuilder, CommandHandler, CallbackQueryHandler,
+    Application
+)
 from bot.config import BOT_TOKEN
 from bot.db import init_db
 from bot.handlers import (
@@ -15,6 +18,33 @@ from bot.admin_handlers import (
     suspend_command, unsuspend_command, extend_command, listusers_command,
     userinfo_command, lookup_command, broadcast_command
 )
+
+async def setup_commands(app: Application) -> None:
+    """Set the bot's command menu (visible when user types /)."""
+    commands = [
+        ("start", "Welcome message / راهنما"),
+        ("language", "Switch language / تغییر زبان"),
+        ("link", "Link your XHTTP username / اتصال حساب"),
+        ("unlink", "Unlink your account / قطع اتصال"),
+        ("status", "Show your usage / وضعیت مصرف"),
+        ("servers", "List all servers / لیست سرورها"),
+        ("getconfig", "Get VLESS config / دریافت کانفیگ"),
+        ("qr", "Get QR code for a server / دریافت کد QR"),
+        # Admin commands (only visible to admins, but listed for all)
+        ("addserver", "[Admin] Add a new server"),
+        ("removeserver", "[Admin] Remove a server"),
+        ("adduser", "[Admin] Create a new user"),
+        ("removeuser", "[Admin] Revoke a user"),
+        ("suspend", "[Admin] Suspend a user"),
+        ("unsuspend", "[Admin] Unsuspend a user"),
+        ("extend", "[Admin] Extend user expiry"),
+        ("listusers", "[Admin] List users on a server"),
+        ("userinfo", "[Admin] Show full user details"),
+        ("lookup", "[Admin] Lookup any user across servers"),
+        ("broadcast", "[Admin] Send message to all users"),
+    ]
+    await app.bot.set_my_commands(commands)
+    print("✅ Bot command menu set")
 
 def main():
     if not BOT_TOKEN:
@@ -47,6 +77,13 @@ def main():
     app.add_handler(CommandHandler("userinfo", userinfo_command))
     app.add_handler(CommandHandler("lookup", lookup_command))
     app.add_handler(CommandHandler("broadcast", broadcast_command))
+
+    # Set up the command menu
+    # We need to run the async setup within the application's event loop.
+    # The easiest way is to use app.post_init.
+    async def post_init(application: Application):
+        await setup_commands(application)
+    app.post_init = post_init
 
     print("✅ XHTTP Telegram Bot started")
     app.run_polling()
