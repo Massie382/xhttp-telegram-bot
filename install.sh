@@ -27,16 +27,20 @@ fi
 
 # Determine script directory (supports curl | bash)
 if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
-    # ✅ FIXED: use the correct repository URL
     REPO_URL="https://raw.githubusercontent.com/Massie382/xhttp-telegram-bot/main"
     TMPDIR=$(mktemp -d /tmp/xhttp-telegram-bot.XXXXXX)
     cd "$TMPDIR"
     echo -e "${CYAN}Downloading installer files...${NC}"
+    
+    # Download ALL required files
     curl -fsSL -O "$REPO_URL/install.sh"
     curl -fsSL -O "$REPO_URL/requirements.txt"
     curl -fsSL -O "$REPO_URL/config.example.toml"
     curl -fsSL -O "$REPO_URL/setup_tunnels.sh"
-    mkdir -p bot systemd
+    curl -fsSL -O "$REPO_URL/uninstall.sh"
+    
+    # Download bot directory
+    mkdir -p bot
     curl -fsSL "$REPO_URL/bot/main.py" -o bot/main.py
     curl -fsSL "$REPO_URL/bot/config.py" -o bot/config.py
     curl -fsSL "$REPO_URL/bot/db.py" -o bot/db.py
@@ -45,7 +49,12 @@ if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
     curl -fsSL "$REPO_URL/bot/admin_handlers.py" -o bot/admin_handlers.py
     curl -fsSL "$REPO_URL/bot/utils.py" -o bot/utils.py
     curl -fsSL "$REPO_URL/bot/strings.py" -o bot/strings.py
+    curl -fsSL "$REPO_URL/bot/__init__.py" -o bot/__init__.py
+    
+    # Download systemd directory
+    mkdir -p systemd
     curl -fsSL "$REPO_URL/systemd/xhttp-telegram-bot.service" -o systemd/xhttp-telegram-bot.service
+    
     exec bash install.sh
 fi
 
