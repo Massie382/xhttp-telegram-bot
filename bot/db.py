@@ -38,11 +38,13 @@ def get_db():
 
 # User functions
 def user_exists(telegram_id: int) -> bool:
+    """Check if user exists in database."""
     with get_db() as conn:
         cur = conn.execute("SELECT 1 FROM bot_users WHERE telegram_id = ?", (telegram_id,))
         return cur.fetchone() is not None
 
 def create_user(telegram_id: int, language: str = "en"):
+    """Create a new user with language preference."""
     with get_db() as conn:
         conn.execute(
             "INSERT INTO bot_users (telegram_id, language) VALUES (?, ?)",
@@ -75,6 +77,8 @@ def get_linked_username(telegram_id: int) -> Optional[str]:
         return row["linked_username"] if row else None
 
 def set_linked_username(telegram_id: int, username: str):
+    """Store username in lowercase for case-insensitive linking."""
+    username = username.lower()  # ✅ Case‑insensitive storage
     with get_db() as conn:
         conn.execute(
             "INSERT INTO bot_users (telegram_id, linked_username, linked_at) VALUES (?, ?, strftime('%s','now')) ON CONFLICT(telegram_id) DO UPDATE SET linked_username = ?, linked_at = strftime('%s','now')",
